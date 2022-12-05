@@ -1,10 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 
 public class RubyController : MonoBehaviour
 {
+    public float speed = 3.0f;
+
     public int maxHealth = 5;
+
+    public int health { get { return currentHealth; }}
     int currentHealth;
 
 
@@ -15,9 +21,8 @@ public class RubyController : MonoBehaviour
     void Start()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
-
-        QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 240;
+        currentHealth = maxHealth;
+        currentHealth = 1;
         
     }
 
@@ -25,8 +30,8 @@ public class RubyController : MonoBehaviour
     void Update()
     {
         //create variables to use the built in axes
-        float horizontal = Input.GetAxis("Horizantal");
-        float vertical = Input.GetAxis("Vertical");
+        horizantal = Input.GetAxis("Horizantal");
+        vertical = Input.GetAxis("Vertical");
 
         //Create a movement vector
     }
@@ -36,14 +41,14 @@ public class RubyController : MonoBehaviour
         Vector2 position = transform.position;
 
         //make vertical and horizontal movement work
-        position.x = position.x + 3.0f * horizantal * Time.deltaTime;
-        position.y = position.y + 3.0f * vertical * Time.deltaTime;
+        position.x = position.x + speed * horizantal * Time.deltaTime;
+        position.y = position.y + speed * vertical * Time.deltaTime;
 
         rigidbody2d.MovePosition(position);
 
         transform.position = position;
     }
-    void ChangeHealth(int amount)
+    public void ChangeHealth(int amount)
     {
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
         Debug.Log(currentHealth + "/" + maxHealth);
